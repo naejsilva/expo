@@ -1,171 +1,311 @@
----
-title: Expo Build
-sidebar_title: Introduction
-description: Expo Build is a hosted service for building app binaries for your Expo and React Native projects.
----
+src/
+├── components/
+│   ├── GenericAIChat.js    # Chat IA Genérica (lado esquerdo)
+│   ├── ElectricAIPanel.js  # Painel Claude Especializado (lado direito)
+│   ├── BuyButton.js        # Botão "Quero o Claude Especializado"
+├── screens/
+│   └── HomeScreen.js       # Tela principal dividida em 2 colunas
+└── App.js
+import React from 'react';
+import { View, StyleSheet } from 'react-native';
+import HomeScreen from './src/screens/HomeScreen';
 
-import { Cube01Icon } from '@expo/styleguide-icons/outline/Cube01Icon';
+export default function App() {
+  return (
+    <View style={styles.container}>
+      <HomeScreen />
+    </View>
+  );
+}
 
-import { BoxLink } from '~/ui/components/BoxLink';
-import { Collapsible } from '~/ui/components/Collapsible';
-import { NoIcon, YesIcon } from '~/ui/components/DocIcons';
-import { FAQ } from '~/ui/components/FAQ';
-import { RelatedSkills } from '~/ui/components/RelatedSkills';
-import { SimulatorsLaunchCallout } from '~/ui/components/SimulatorsLaunchCallout';
-import { Terminal } from '~/ui/components/Snippet';
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#0A0E1A'
+  }
+});
 
-**Expo Build** is a hosted service that builds app binaries (also called [standalone apps](/more/glossary-of-terms/#standalone-app)) for your Expo and React Native projects.
+import React from 'react';
+import { View, Text, ScrollView, StyleSheet } from 'react-native';
+import GenericAIChat from '../components/GenericAIChat';
+import ElectricAIPanel from '../components/ElectricAIPanel';
+import BuyButton from '../components/BuyButton';
 
-Expo Build makes building your apps for distribution simple and easy to automate by providing defaults that work well for Expo and React Native projects out of the box, and by handling your app signing credentials for you (if you wish). It also makes sharing builds with your team easier than ever with [internal distribution](/build/internal-distribution/) (using [ad hoc](/build/internal-distribution/) and/or enterprise "universal" provisioning), deeply integrates with Expo Submit for app store submissions, and has first-class support for the [`expo-updates`](/build/updates/) library.
+export default function HomeScreen() {
+  return (
+    <ScrollView contentContainerStyle={styles.page}>
+      <Text style={styles.titleTop}>Eletrobots</Text>
+      <View style={styles.twoColumns}>
+        {/* COLUNA ESQUERDA: IA GENÉRICA */}
+        <View style={styles.columnLeft}>
+          <Text style={styles.headerLeft}>IA GENÉRICA</Text>
+          <GenericAIChat />
+          <View style={styles.listBad}>
+            <Text style={styles.badItem}>❌ VOCÊ EXPLICA TUDO DO ZERO</Text>
+            <Text style={styles.badItem}>❌ RESPOSTAS SEM ESTRUTURA</Text>
+            <Text style={styles.badItem}>❌ TENTATIVA E ERRO</Text>
+          </View>
+        </View>
 
-Expo Build is also designed to work for any native project, whether or not you use Expo and React Native. It's the fastest way to get from `npx create-expo-app` or `npx @react-native-community/cli@latest init` to app stores.
+        {/* COLUNA DIREITA: CLAUDE ESPECIALIZADO */}
+        <View style={styles.columnRight}>
+          <Text style={styles.headerRight}>CLAUDE PARA{'\n'}ENGENHEIROS ELETRICISTAS</Text>
+          <ElectricAIPanel />
+          <View style={styles.listGood}>
+            <Text style={styles.goodItem}>✅ 50 SKILLS DE ENGENHARIA ELÉTRICA</Text>
+            <Text style={styles.goodItem}>✅ 1.000 PROMPTS AVANÇADOS</Text>
+            <Text style={styles.goodItem}>✅ PROJETOS, LAUDOS E CÁLCULOS</Text>
+          </View>
+        </View>
+      </View>
 
-<SimulatorsLaunchCallout />
+      <View style={styles.priceBox}>
+        <Text style={styles.priceText}>ACESSO COMPLETO POR <Text style={styles.priceValue}>R$47</Text></Text>
+      </View>
 
-## Quick start
+      <BuyButton />
+    </ScrollView>
+  );
+}
 
-> **info** The commands for Expo Build start with `eas` and require EAS CLI. See [How to install EAS CLI](/eas/cli/#installation) for more information.
+const styles = StyleSheet.create({
+  page: {
+    padding:12
+  },
+  titleTop:{
+    color:'#FFF',
+    fontSize:22,
+    fontWeight:'bold',
+    marginBottom:16
+  },
+  twoColumns:{
+    flexDirection:'row',
+    gap:8
+  },
+  columnLeft:{
+    flex:1,
+    backgroundColor:'#141824',
+    borderRadius:12,
+    padding:10
+  },
+  columnRight:{
+    flex:1,
+    backgroundColor:'#0F1626',
+    borderRadius:12,
+    padding:10,
+    borderWidth:1,
+    borderColor:'#0088FF'
+  },
+  headerLeft:{
+    color:'#FFF',
+    fontSize:20,
+    fontWeight:'bold',
+    textAlign:'center',
+    marginBottom:10
+  },
+  headerRight:{
+    color:'#FF7A00',
+    fontSize:20,
+    fontWeight:'bold',
+    textAlign:'center',
+    marginBottom:10
+  },
+  listBad:{
+    marginTop:12
+  },
+  badItem:{
+    color:'#FF4444',
+    fontSize:13,
+    marginVertical:3
+  },
+  listGood:{
+    marginTop:12
+  },
+  goodItem:{
+    color:'#00D040',
+    fontSize:13,
+    marginVertical:3
+  },
+  priceBox:{
+    marginTop:20,
+    alignItems:'center'
+  },
+  priceText:{
+    color:'#FFF',
+    fontSize:24,
+    fontWeight:'bold'
+  },
+  priceValue:{
+    color:'#FF7A00',
+    fontSize:30
+  }
+});
 
-To build your app, run the following command:
+import React from 'react';
+import { View, Text, TextInput, StyleSheet } from 'react-native';
 
-<Terminal cmd={['$ eas build --platform all']} />
+export default function GenericAIChat() {
+  return (
+    <View style={styles.chatBox}>
+      <Text style={styles.chatTitle}>Chat de IA</Text>
+      <View style={styles.messageUser}>
+        <Text style={styles.msgText}>Como dimensionar um circuito elétrico para uma indústria?</Text>
+      </View>
+      <View style={styles.messageAi}>
+        <Text style={styles.msgAi}>[Resposta genérica desestruturada]</Text>
+      </View>
+      <View style={styles.messageUser}>
+        <Text style={styles.msgText}>E qual norma devo seguir?</Text>
+      </View>
+      <View style={styles.messageAi}>
+        <Text style={styles.msgAi}>[Resposta genérica desestruturada]</Text>
+      </View>
+      <TextInput
+        style={styles.input}
+        placeholder="Digite sua mensagem..."
+        placeholderTextColor="#888"
+      />
+    </View>
+  );
+}
 
-This command sends your project to Expo Build and produces installable binaries for Android and iOS. You can also build for one platform at a time by passing in `--platform android` or `--platform ios` as desired. For complete setup instructions, see [Create your first build](/build/setup/).
+const styles = StyleSheet.create({
+  chatBox:{
+    backgroundColor:'#0A0D18',
+    borderRadius:8,
+    padding:8
+  },
+  chatTitle:{
+    color:'#FFF',
+    marginBottom:6
+  },
+  messageUser:{
+    backgroundColor:'#222838',
+    borderRadius:6,
+    padding:6,
+    marginVertical:4
+  },
+  messageAi:{
+    backgroundColor:'#181D2B',
+    borderRadius:6,
+    padding:6,
+    marginVertical:4
+  },
+  msgText:{
+    color:'#FFF',
+    fontSize:11
+  },
+  msgAi:{
+    color:'#BBB',
+    fontSize:11
+  },
+  input:{
+    backgroundColor:'#111520',
+    color:'#FFF',
+    borderRadius:6,
+    padding:6,
+    marginTop:6,
+    fontSize:11
+  }
+});
+import React from 'react';
+import { View, Text, StyleSheet } from 'react-native';
 
-### Expo Skills for AI agents
+export default function ElectricAIPanel() {
+  return (
+    <View style={styles.panel}>
+      {/* Diagrama Unifilar */}
+      <View style={styles.boxBlue}>
+        <Text style={styles.boxTitle}>DIAGRAMA UNIFILAR</Text>
+        <Text style={styles.contentText}>13,8 kV → TR 750 kVA (13,8/0,38 kV) → QD1‑QD4</Text>
+      </View>
 
-If you use an AI agent, install [Expo Skills](/skills/) to teach it how to create production builds and ship them to the app stores:
+      {/* Normas Aplicáveis */}
+      <View style={styles.boxBlue}>
+        <Text style={styles.boxTitle}>NORMAS APLICÁVEIS</Text>
+        <Text style={styles.contentText}>✓ ABNT NBR 5410:2024</Text>
+        <Text style={styles.contentText}>✓ ABNT NBR 14039:2005</Text>
+        <Text style={styles.contentText}>✓ ABNT NBR IEC 60439‑1:2023</Text>
+      </View>
 
-<RelatedSkills names={['eas-app-stores']} />
+      {/* Dimensionamento Cabos */}
+      <View style={styles.boxBlue}>
+        <Text style={styles.boxTitle}>DIMENSIONAMENTO DE CABOS</Text>
+        <Text style={styles.contentText}>QD1: 63A • 3x16 mm² + PE 16 mm²</Text>
+        <Text style={styles.contentText}>QD2: 42A • 3x10 mm² + PE 10 mm²</Text>
+        <Text style={styles.contentText}>QD3: 28A • 3x6 mm² + PE 6 mm²</Text>
+        <Text style={styles.contentText}>QD4: 18A • 3x4 mm² + PE 4 mm²</Text>
+      </View>
 
-## Key features
+      {/* Verificações */}
+      <View style={styles.boxBlue}>
+        <Text style={styles.boxTitle}>VERIFICAÇÕES</Text>
+        <Text style={styles.okText}>✓ Queda de tensão: OK</Text>
+        <Text style={styles.okText}>✓ Capacidade de corrente: OK</Text>
+        <Text style={styles.okText}>✓ Curto‑circuito: OK</Text>
+        <Text style={styles.okText}>✓ Seletividade: OK</Text>
+        <Text style={styles.okText}>✓ Aterramento: OK</Text>
+      </View>
+    </View>
+  );
+}
 
-- Cloud builds for Android and iOS with consistent environments
-- Automatically provision and manage app signing credentials or use your own
-- Share [internal distribution](/build/internal-distribution/) builds with a URL
-- Automate builds with [build profiles](/build/eas-json/#build-profiles) in **eas.json** (named sets of build settings) and integrations with [Expo Workflows](/eas/workflows/get-started/) or [CI pipelines](/build/building-on-ci/)
-- Auto-submit successful builds to app stores via [`--auto-submit`](/build/automate-submissions/) and Expo Submit
-- First-class [`expo-updates` integration](/build/updates/) with per-profile channels and [runtime version](/eas-update/runtime-versions/) guidance
-- Reuse [development builds](/develop/development-builds/introduction/) across your team. When two team members run `eas build:dev` and the project fingerprint matches, the existing build is downloaded from Expo Build instead of creating a new one
-- Faster builds via [dependency caching and custom cache paths](/build-reference/caching/)
-- Install builds and updates on devices with [Expo Orbit](https://expo.dev/orbit)
+const styles = StyleSheet.create({
+  panel:{
+    gap:6
+  },
+  boxBlue:{
+    backgroundColor:'#0B2040',
+    borderWidth:1,
+    borderColor:'#0088FF',
+    borderRadius:8,
+    padding:8
+  },
+  boxTitle:{
+    color:'#0088FF',
+    fontWeight:'bold',
+    fontSize:12,
+    marginBottom:4
+  },
+  contentText:{
+    color:'#FFF',
+    fontSize:10
+  },
+  okText:{
+    color:'#00D040',
+    fontSize:10
+  }
+});
 
-## When to use Expo Build
+import React from 'react';
+import { TouchableOpacity, Text, StyleSheet, Alert } from 'react-native';
 
-| Scenario                                                                             | Recommendation |
-| ------------------------------------------------------------------------------------ | -------------- |
-| Build production-ready binaries for app stores                                       | <YesIcon />    |
-| Share builds with testers via [internal distribution](/build/internal-distribution/) | <YesIcon />    |
-| Consistent builds across team members without local environment setup                | <YesIcon />    |
-| Automate builds from CI or [Expo Workflows](/eas/workflows/get-started/)             | <YesIcon />    |
-| Managed app signing credentials                                                      | <YesIcon />    |
-| Debugging native code locally                                                        | <NoIcon />     |
+export default function BuyButton() {
+  const handleBuy = () => {
+    Alert.alert("Compra","Redirecionando para pagamento R$47 — Acesso ao Claude Especializado Engenharia Elétrica");
+  };
 
-## Frequently asked questions
+  return (
+    <TouchableOpacity style={styles.btn} onPress={handleBuy}>
+      <Text style={styles.btnText}>⚡ QUERO O CLAUDE ESPECIALIZADO</Text>
+    </TouchableOpacity>
+  );
+}
 
-<FAQ>
-
-<Collapsible summary="How do I share builds with my team before submitting to app stores?">
-
-Use [internal distribution](/build/internal-distribution/) to share builds with a URL. Set `"distribution": "internal"` in your [build profile](/build/eas-json/#build-profiles) in **eas.json** to generate installable Android Package (APK) files for Android or [ad hoc builds](/build/internal-distribution/) for iOS.
-
-</Collapsible>
-
-<Collapsible summary="Can I use Expo Build with existing React Native projects?">
-
-Yes. Expo Build works with existing React Native projects created with `npx react-native init` or similar tools. See [Overview of using Expo with existing React Native apps](/bare/overview/) for more information.
-
-</Collapsible>
-
-<Collapsible summary="Does Expo Build handle app signing credentials?">
-
-Yes. Expo Build can generate and manage Android [keystores](/app-signing/app-credentials/#android), iOS [provisioning profiles](/app-signing/app-credentials/#ios) and [distribution certificates](/app-signing/app-credentials/#ios), or use credentials you provide. See [App signing credentials](/app-signing/app-credentials/) for more information.
-
-</Collapsible>
-
-<Collapsible summary="Can I run builds locally instead of in the cloud?">
-
-Yes. Use [local builds](/build-reference/local-builds/) with `eas build --local` to run builds on your machine. This is useful for debugging or for security policies that require local builds.
-
-</Collapsible>
-
-<Collapsible summary="Can I use Expo Build with Expo Workflows or CI pipelines?">
-
-Yes. Expo Build integrates with [Expo Workflows](/eas/workflows/get-started/) using the `build` job type. Add a build job to your workflow configuration, for example:
-
-```yaml
-jobs:
-  build_ios:
-    type: build
-    params:
-      platform: ios
-```
-
-The build job supports builds for both platforms or conditional builds based on the branch:
-
-```yaml
-jobs:
-  build:
-    type: build
-    params:
-      platform: all
-      profile: ${{ github.ref_name == 'main' && 'production' || 'preview' }}
-```
-
-For more information and other usage examples, see the [Expo Workflows build job](/eas/workflows/pre-packaged-jobs#build).
-
-Expo Build supports [builds from GitHub](/build/building-from-github/) and [building on CI](/build/building-on-ci/) with any provider.
-
-</Collapsible>
-
-<Collapsible summary="What build server infrastructure does Expo Build use?">
-
-Android builds run on Linux runners hosted in Google Cloud Platform, and iOS builds run on macOS runners hosted in Expo's macOS cloud. See [Build server infrastructure](/build-reference/infrastructure/).
-
-</Collapsible>
-
-</FAQ>
-
-## Get started
-
-<BoxLink
-  title="Create your first build"
-  description="It should only take a few minutes in total to get up and running for iOS and/or Android."
-  href="/build/setup"
-  Icon={Cube01Icon}
-/>
-
-<BoxLink
-  title="Share your apps with internal testers"
-  description="Expo Build can help share preview builds of your app with a single URL."
-  href="/build/internal-distribution"
-  Icon={Cube01Icon}
-/>
-
-<BoxLink
-  title="Automate submissions"
-  description="Learn how Expo Build can take your successful builds and handle uploading them to app stores automatically."
-  href="/build/automate-submissions"
-  Icon={Cube01Icon}
-/>
-
-<BoxLink
-  title="App version management"
-  description="Automate version bumps so you never have to think about them again."
-  href="/build-reference/app-versions"
-  Icon={Cube01Icon}
-/>
-
-<BoxLink
-  title="Run builds locally or on your own infrastructure"
-  description="Expo Build is a hosted service, and it can also run on your own machine, for example, to debug or to comply with company security policies."
-  href="/build-reference/local-builds"
-  Icon={Cube01Icon}
-/>
-
-<BoxLink
-  title="Limitations"
-  description="Expo Build is new and rapidly evolving, so we recommend getting familiar with the current limitations."
-  href="/build-reference/limitations"
-  Icon={Cube01Icon}
-/>
+const styles = StyleSheet.create({
+  btn:{
+    marginTop:16,
+    backgroundColor:'#FF7A00',
+    paddingVertical:16,
+    borderRadius:10,
+    alignItems:'center',
+    shadowColor:'#FF7A00',
+    shadowOpacity:0.6,
+    shadowRadius:10
+  },
+  btnText:{
+    color:'#000',
+    fontSize:18,
+    fontWeight:'bold'
+  }
+});
